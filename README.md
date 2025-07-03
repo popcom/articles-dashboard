@@ -71,7 +71,6 @@ chmod +x run.sh
 - Enums like `ArticleCategory`, `Material`, and `BicycleCategory` are mapped consistently across frontend and backend
 - The backend handles all filtering/sorting/pagination
 - SQL Server is assumed to be available locally on default port
-- Redis is optional and can be skipped if not needed
 
 ---
 
