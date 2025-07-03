@@ -1,0 +1,18 @@
+[
+  {
+    "articleNumber": 1001,
+    "name": "Carbon Crankset",
+    "articleCategory": "Crank",
+    "material": "Carbon",
+    "netWeight": 580,
+    "bicycleCategoryIds": [ 1, 2 ]
+  },
+  {
+    "articleNumber": 1002,
+    "name": "Steel Hub",
+    "articleCategory": "Hub",
+    "material": "Steel",
+    "netWeight": 780,
+    "bicycleCategoryIds": [ 3 ]
+  }
+]

@@ -1,0 +1,145 @@
+<div class="text-xl font-bold bg-primary text-white p-4 h1">
+  Article Dashboard
+</div>
+<div class="flex justify-center p-8 bg-light-gray h-full">
+  <mat-card class="p-4 shadow-sm">
+    <mat-card-title class="text-xl text-accent font-semibold pb-8"
+      >Articles List</mat-card-title
+    >
+
+    <!-- Filter Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+      <mat-form-field appearance="fill">
+        <mat-label>Article Category</mat-label>
+        <mat-select
+          [(ngModel)]="filters.articleCategory"
+          (selectionChange)="loadData(true)"
+        >
+          <mat-option value="">All</mat-option>
+          <mat-option
+            *ngFor="let option of articleCategoryOptions"
+            [value]="option"
+            >{{ option }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Bicycle Categories</mat-label>
+        <mat-select
+          multiple
+          [(ngModel)]="filters.bicycleCategoryIds"
+          (selectionChange)="loadData(true)"
+        >
+          <mat-option
+            *ngFor="let cat of bicycleCategoryOptions"
+            [value]="cat.id"
+            >{{ cat.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Material</mat-label>
+        <mat-select
+          [(ngModel)]="filters.material"
+          (selectionChange)="loadData(true)"
+        >
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let option of materialOptions" [value]="option">{{
+            option
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="resetFilters()"
+        matTooltip="Reset Filters"
+      >
+        <mat-icon>filter_alt_off</mat-icon>
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/articles/new']"
+      >
+        + Add New Article
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table
+        mat-table
+        [dataSource]="(articles$ | async) ?? []"
+        matSort
+        (matSortChange)="onSortChange($event)"
+        class="mat-elevation-z2 w-full"
+      >
+        <ng-container matColumnDef="articleNumber">
+          <th mat-header-cell *matHeaderCellDef>Article Number</th>
+          <td mat-cell *matCellDef="let a">{{ a.articleNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let a">{{ a.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="articleCategory">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Article Category
+          </th>
+          <td mat-cell *matCellDef="let a">
+            {{ a.articleCategory | mapEnum : ArticleCategoryMap }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bicycleCategories">
+          <th mat-header-cell *matHeaderCellDef>Bicycle Category</th>
+          <td mat-cell *matCellDef="let a">
+            {{ a.bicycleCategories | joinNames }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="material">
+          <th mat-header-cell *matHeaderCellDef>Material</th>
+          <td mat-cell *matCellDef="let a">{{ MaterialMap[a.material] }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="netWeight">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Net Weight (g)
+          </th>
+          <td mat-cell *matCellDef="let a">{{ a.netWeight }} g</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let a">
+            <button
+              mat-icon-button
+              color="accent"
+              matTooltip="Edit Article"
+              [routerLink]="['/articles/edit', a.id]"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator
+        [length]="(total$ | async) ?? 0"
+        [pageSize]="filters.pageSize"
+        [pageIndex]="filters.page - 1"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </mat-card>
+</div>
